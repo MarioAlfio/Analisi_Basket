@@ -53,7 +53,26 @@ data$DefRtg = ((OppPts)/(data$Possper))
 #Net Rating
 data$NetRtg = (data$OffRtg-data$DefRtg)
 
+newdata = subset(data,select = c(MP,Tiri.segnati,Tiri.tentati,Tiri.da.3,Punti.Panchina,Assist,Punti,ORper,DRper,TRper,Pace,Possper,Astper,STper,Blkper,TOper,eFGper,TSper,OffRtg))
+
 #####################################Grafici##############################################
+
+###Grafico correlazione### 
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+
+# Correlation matrix
+corr <- round(cor(newdata), 3)
+# Plot
+ggcorrplot(corr, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           colors = c("tomato2", "white", "springgreen3"), 
+           title="Correlogram of Analisi Basket", 
+           ggtheme=theme_bw)
+
 #confronto Tiri Tentati con Pace
 p <- ggplot(data, aes(x=Tiri.tentati, y=Pace, color=Team )) +
   geom_point() + # Show dots
