@@ -1,7 +1,7 @@
 #Caricamento tabella e dati necessari per i calcoli
 data = read.csv("C:/Users/Mario/Desktop/Analisi Basket/12' giornata.csv", sep = ";", 
                 header = TRUE, stringsAsFactors = FALSE)
-colnames(data)[colnames(data)=="ï..Team"] <- "Team"
+colnames(data)[colnames(data)=="Ã¯..Team"] <- "Team"
 head(data)
 
 #Indici squadra:
@@ -48,39 +48,12 @@ data$eFGper = ((data$Tiri.da.2+(1.5*data$Tiri.da.3))/(data$Tiri.tentati))
 data$TSper = ((data$Punti)/(2*(data$Tiri.tentati+(0.44*data$Tiri.liberi.tentati))))*100
 #Offensive Rating[OffRtg];
 data$OffRtg = ((data$Punti)/(data$Possper))
-#Calcolare quando faccio analisi per la partita (ex. cremona- virtus prima 
-#calcolo il defrating di cremona e poi della virtus)
 #Defensive Rating[DefRtg];
-#data$DefRtg = ((OppPts)/(data$Possper))
+data$DefRtg = ((OppPts)/(data$Possper))
 #Net Rating
-#data$NetRtg = (data$OffRtg-data$DefRtg)
+data$NetRtg = (data$OffRtg-data$DefRtg)
 
-
-#Grafici
-#Melli Grafica con foto e media rimbalzi e media totale rimbalizi percentuale
-mean(data$TRper)
-#tizio di bologna con foto e media tiri da tre della giornata
-mean(data$Tiri.da.3)
-
-
-newdata = subset(data,select = c(Team,MP,Tiri.segnati,Tiri.tentati,Tiri.da.3,Punti.Panchina,Assist,Punti,ORper,DRper,TRper,Pace,Possper,Astper,STper,Blkper,TOper,eFGper,TSper,OffRtg))
-
-###############################################Grafico correlazione##############  
-devtools::install_github("kassambara/ggcorrplot")
-library(ggcorrplot)
-
-# Correlation matrix
-corr <- round(cor(newdata), 3)
-# Plot
-ggcorrplot(corr, hc.order = TRUE, 
-           type = "lower", 
-           lab = TRUE, 
-           lab_size = 3, 
-           method="circle", 
-           colors = c("tomato2", "white", "springgreen3"), 
-           title="Correlogram of Analisi Basket", 
-           ggtheme=theme_bw)
-##################################################################################
+#####################################Grafici##############################################
 #confronto Tiri Tentati con Pace
 p <- ggplot(data, aes(x=Tiri.tentati, y=Pace, color=Team )) +
   geom_point() + # Show dots
@@ -97,9 +70,8 @@ p + theme(
   axis.title.x = element_text(color="blue", size=14, face="bold"),
   axis.title.y = element_text(color="#993333", size=14, face="bold")
 )
-#cambiare sfondo
-#p + theme(panel.background = element_rect(fill = 'black',colour = "red"))
-#confronto Tiri segnati con Rimbalzi Difensivi, 11 giornata napoli ha raccolti più rimbalzi 
+
+#confronto Tiri segnati con Rimbalzi Difensivi, 11 giornata napoli ha raccolti piÃ¹ rimbalzi 
 #dif e totalizzato maggior numero di tiri segnati
 p1 <- ggplot(data, aes(x=DRper, y=Tiri.segnati, color=Team )) +
   geom_point() + # Show dots
@@ -109,13 +81,13 @@ p1 <- ggplot(data, aes(x=DRper, y=Tiri.segnati, color=Team )) +
   geom_text(
     aes(label = Team), 
     hjust = -0.15)+
-  #geom_hline(yintercept=mean(data$Pace), color="red")+
   theme(legend.position = "none")
 p1
 p1 + theme(
   axis.title.x = element_text(color="blue", size=14, face="bold"),
   axis.title.y = element_text(color="#993333", size=14, face="bold")
 )
+
 #squadra con maggior frequenza di tiri segnati:
 p2 <- ggplot(data, aes(x=Tiri.segnati, y=TSper, color=Team )) +
   geom_point() + # Show dots
@@ -125,13 +97,13 @@ p2 <- ggplot(data, aes(x=Tiri.segnati, y=TSper, color=Team )) +
   geom_text(
     aes(label = Team), 
     hjust = -0.15)+
-  #geom_hline(yintercept=mean(data$Pace), color="red")+
   theme(legend.position = "none")
 p2
 p2 + theme(
   axis.title.x = element_text(color="blue", size=14, face="bold"),
   axis.title.y = element_text(color="#993333", size=14, face="bold")
 )
+
 #Analisi Partite
 library(dplyr)
 Varese <- filter(newdata, newdata$Team == "Varese")
