@@ -1,5 +1,5 @@
 #Caricamento tabella e dati necessari per i calcoli
-data = read.csv("C:/Users/Mario/Desktop/Analisi Basket/12' giornata.csv", sep = ";", 
+data = read.csv("12' giornata.csv", sep = ";", 
                 header = TRUE, stringsAsFactors = FALSE)
 colnames(data)[colnames(data)=="ï..Team"] <- "Team"
 head(data)
